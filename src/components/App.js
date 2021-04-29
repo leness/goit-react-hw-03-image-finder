@@ -16,7 +16,8 @@ class App extends Component {
     isLoading: false,
     error: null,
     showModal: false,
-    largeImageURL: '', 
+    largeImageURL: '',
+    total: null,
   }
 
 
@@ -37,7 +38,13 @@ class App extends Component {
 
 
   onChangeQuery = query => {
-    this.setState({ searchQuery: query, currentPage: 1, hits: [], error: null });
+    this.setState({
+      searchQuery: query,
+      currentPage: 1,
+      hits: [],
+      error: null,
+      total: null
+    });
   }
 
 
@@ -52,6 +59,7 @@ class App extends Component {
         this.setState(prevState => ({
           hits: [...prevState.hits, ...hits],
           currentPage: prevState.currentPage + 1,
+          total: hits.total,
         }))
       }).catch( error => this.setState({ error }) )
       .finally(() => this.setState({ isLoading: false }));
@@ -72,10 +80,12 @@ class App extends Component {
   }
 
   
+  
   render() {
-    const { showModal, isLoading, hits, error, largeImageURL } = this.state;
-    const shouldRenderLoadMoreButton = hits.length > 0 && !isLoading;
-    
+    const { showModal, isLoading, hits, error, largeImageURL, total} = this.state;
+    const hitsLength = hits.length > 0 && hits.length < total;
+    const shouldRenderLoadMoreButton = hitsLength > 0 && !isLoading;
+   
     return (
       <div className={s.App}>
        {error && <h1 color="red">Sorry! Enter another request!!!</h1>}
@@ -91,7 +101,8 @@ class App extends Component {
 
         <ImageGallery hits={hits} onClick={this.getElem} />
         
-        {shouldRenderLoadMoreButton && <Button onClick={this.fetchHits}/>}
+        {shouldRenderLoadMoreButton && <Button onClick={this.fetchHits} />}
+        
     </div>
     )
   }
