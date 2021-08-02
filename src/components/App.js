@@ -5,7 +5,8 @@ import ImageGallery from './ImageGallery'
 import Button from './Button'
 import Modal from '../components/Modal'
 import s from './App.module.css';
-import Loader from "react-loader-spinner";
+// import Loader from "react-loader-spinner";
+import Spinner from './Loader';
 
 
 class App extends Component {
@@ -17,7 +18,7 @@ class App extends Component {
     error: null,
     showModal: false,
     largeImageURL: '',
-    total: null,
+    // total: null,
   }
 
 
@@ -43,7 +44,7 @@ class App extends Component {
       currentPage: 1,
       hits: [],
       error: null,
-      total: null
+      // total: null
     });
   }
 
@@ -83,7 +84,7 @@ class App extends Component {
   
   render() {
     const { showModal, isLoading, hits, error, largeImageURL, total} = this.state;
-    const hitsLength = hits.length > 0 && hits.length < total;
+    const hitsLength = hits.length > 0 && hits.length;
     const shouldRenderLoadMoreButton = hitsLength > 0 && !isLoading;
    
     return (
@@ -92,7 +93,7 @@ class App extends Component {
 
         <Searchbar onSubmit={this.onChangeQuery} />
 
-        {isLoading && <Loader />}
+        {isLoading && <Spinner />}
        
         {showModal &&
           <Modal onClose={this.toggleModal}>
